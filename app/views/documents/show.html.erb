@@ -1,0 +1,99 @@
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="container mx-auto px-4">
+    <div class="max-w-4xl mx-auto">
+      <!-- Header -->
+      <div class="mb-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="flex items-center">
+              <%= link_to documents_path, class: "text-blue-600 hover:text-blue-800 mr-4" do %>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+              <% end %>
+              <h1 class="text-3xl font-bold text-gray-900"><%= @document.title %></h1>
+            </div>
+            <p class="mt-2 text-gray-600">Document details and content preview</p>
+          </div>
+          <%= button_to document_path(@document),
+              method: :delete,
+              class: "bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition duration-150 ease-in-out",
+              data: {
+                turbo_confirm: "Are you sure you want to delete this document? This action cannot be undone.",
+                turbo_method: :delete
+              } do %>
+            <span class="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+              Delete Document
+            </span>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Document Details -->
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <!-- Metadata Section -->
+        <div class="border-b border-gray-200">
+          <div class="px-6 py-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">Uploaded</h3>
+                <p class="mt-1 text-sm text-gray-900">
+                  <%= @document.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+                </p>
+              </div>
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">File Type</h3>
+                <p class="mt-1 text-sm text-gray-900">
+                  <%= @document.file.content_type if @document.file.attached? %>
+                </p>
+              </div>
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">File Size</h3>
+                <p class="mt-1 text-sm text-gray-900">
+                  <%= number_to_human_size(@document.file.byte_size) if @document.file.attached? %>
+                </p>
+              </div>
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">Original Filename</h3>
+                <p class="mt-1 text-sm text-gray-900">
+                  <%= @document.file.filename if @document.file.attached? %>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Preview -->
+        <div class="px-6 py-4">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Content Preview</h2>
+          <div class="bg-gray-50 rounded-lg p-4">
+            <div class="prose prose-sm max-w-none">
+              <%= simple_format(truncate(@document.content, length: 1000)) %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Query Section -->
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Ask Questions About This Document</h2>
+          <%= form_with url: query_documents_path, method: :get, class: "flex gap-3", local: true do |f| %>
+            <%= f.text_field :query,
+                placeholder: "Ask a question about this document...",
+                class: "flex-1 rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" %>
+            <%= f.button type: "submit", class: "bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-sm transition duration-150 ease-in-out" do %>
+              <span class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                </svg>
+                Ask Question
+              </span>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
