@@ -3,7 +3,7 @@ source "https://rubygems.org"
 gem "neighbor"
 
 # LLM API client(s)
-gem "ruby-openai", "~> 4.0"
+gem "ruby-openai", "~> 8.0"
 
 # Environment management
 gem "dotenv-rails", groups: [ :development, :test ]
